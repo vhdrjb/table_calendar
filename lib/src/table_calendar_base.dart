@@ -6,7 +6,6 @@ import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
 import 'shared/utils.dart';
 import 'widgets/calendar_core.dart';
-
 class TableCalendarBase extends StatefulWidget {
   final DateTime firstDay;
   final DateTime lastDay;

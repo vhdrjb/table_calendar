@@ -1,11 +1,10 @@
 // Copyright 2019 Aleksander Woźniak
 // SPDX-License-Identifier: Apache-2.0
-
 import 'package:flutter/material.dart';
-
+import 'package:shamsi_date/shamsi_date.dart';
+import 'package:shamsi_date/extensions.dart';
 import '../shared/utils.dart';
 import 'calendar_page.dart';
-
 typedef _OnCalendarPageChanged = void Function(
     int pageIndex, DateTime focusedDay);
 
@@ -172,21 +171,22 @@ class CalendarCore extends StatelessWidget {
   }
 
   DateTime _getBaseDay(CalendarFormat format, int pageIndex) {
-    DateTime day;
-
+    Jalali firstDayJalali = firstDay.toJalali();
+    Jalali jalaliDay;
     switch (format) {
       case CalendarFormat.month:
-        day = DateTime.utc(firstDay.year, firstDay.month + pageIndex);
+        jalaliDay = Jalali(firstDayJalali.year, firstDayJalali.month + pageIndex);
         break;
       case CalendarFormat.twoWeeks:
-        day = DateTime.utc(
-            firstDay.year, firstDay.month, firstDay.day + pageIndex * 14);
+        jalaliDay = Jalali(
+            firstDayJalali.year, firstDayJalali.month, firstDayJalali.day + pageIndex * 14);
         break;
       case CalendarFormat.week:
-        day = DateTime.utc(
-            firstDay.year, firstDay.month, firstDay.day + pageIndex * 7);
+        jalaliDay = Jalali(
+            firstDayJalali.year, firstDayJalali.month, firstDayJalali.day + pageIndex * 7);
         break;
     }
+     DateTime day = jalaliDay.toDateTime();
 
     if (day.isBefore(firstDay)) {
       day = firstDay;
@@ -255,14 +255,16 @@ class CalendarCore extends StatelessWidget {
   }
 
   DateTime _firstDayOfMonth(DateTime month) {
-    return DateTime.utc(month.year, month.month, 1);
+    Jalali jalaliMonth = month.toJalali();
+    return Jalali(jalaliMonth.year, jalaliMonth.month, 1).toDateTime();
   }
 
   DateTime _lastDayOfMonth(DateTime month) {
-    final date = month.month < 12
-        ? DateTime.utc(month.year, month.month + 1, 1)
-        : DateTime.utc(month.year + 1, 1, 1);
-    return date.subtract(const Duration(days: 1));
+    Jalali jalaliMonth = month.toJalali();
+    final date = jalaliMonth.month < 12
+        ? Jalali(jalaliMonth.year, jalaliMonth.month + 1, 1)
+        : Jalali(jalaliMonth.year + 1, 1, 1);
+    return date.toDateTime().subtract(const Duration(days: 1));
   }
 
   int _getRowCount(CalendarFormat format, DateTime focusedDay) {

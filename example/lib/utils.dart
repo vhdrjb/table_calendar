@@ -4,7 +4,7 @@
 import 'dart:collection';
 
 import 'package:table_calendar/table_calendar.dart';
-
+import 'package:shamsi_date/shamsi_date.dart';
 /// Example event class.
 class Event {
   final String title;
@@ -48,5 +48,5 @@ List<DateTime> daysInRange(DateTime first, DateTime last) {
 }
 
 final kToday = DateTime.now();
-final kFirstDay = DateTime(kToday.year, kToday.month - 3, kToday.day);
-final kLastDay = DateTime(kToday.year, kToday.month + 3, kToday.day);
+final kFirstDay = Jalali(1400,04,01).toDateTime();
+final kLastDay = Jalali(1400,04,31).toDateTime();
